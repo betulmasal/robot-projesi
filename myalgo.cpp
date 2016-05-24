@@ -75,17 +75,16 @@ bool __stdcall Algo7(int S, int L, int R, int Init, int& VL, int& VR){
 }
 float PIDKontrolSistemi(int S) {
 
-	double u, integral, öncekihata, hata, türev, dt = 1;
-	double a = 992;//(decimal degeri onluk sayı sistemine çevirdim.)
-	double Kp = 1 , Ki = 0 , Kd = 0;//(Kp degeriyle robotun sallanması ve yalpalanması ayarlanır. Ki , Kd daha ince ayarlar. Kp den sonra Kd sonra Ki ayarlanabilir.)
-
-	öncekihata = 0;
-	integral = 0;
-	hata = S - a; //(Hedef-decimal deger)
-	integral = integral + (hata*dt); //( ∫ e*dt)
-	türev = (hata - öncekihata) / dt;//(de/dt)
-	u = (Kp*hata) + (Ki*integral) + (Kd*türev);//u=[(Kp*e)+(Ki ∫ e*dt)+(Kd*(de/dt))](Robotun hareketini saglayan (oransal)+(integral)+(türev))
-	öncekihata = hata;
+	double u, I, eski_hata, hata, D, dt = 1;
+	double a = 992;
+	double Kp = 1 , Ki = 0 , Kd = 0;
+	eski_hata = 0;
+	I = 0;
+	hata = S - a;
+	I = I + (hata*dt);
+	D = (hata - eski_hata) / dt;
+	u = (Kp*hata) + (Ki*I) + (Kd*D);
+	eski_hata = hata;
 	return u;
 
 }
